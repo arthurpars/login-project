@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Login project</string>
+
+    <string name="brand_name">FITNESS CLUB</string>
+    <string name="heading_welcome_back">Welcome Back</string>
+    <string name="heading_login_line1">Hello</string>
+    <string name="heading_login_line2">Sign in!</string>
+    <string name="heading_signup_line1">Create Your</string>
+    <string name="heading_signup_line2">Account</string>
+
+    <string name="prompt_social_login">Login with Social Media</string>
+
+    <string name="label_name">Full Name</string>
+    <string name="label_email">Gmail</string>
+    <string name="label_signup_identifier">Phone or Gmail</string>
+    <string name="label_password">Password</string>
+    <string name="label_confirm_password">Confirm Password</string>
+
+    <string name="placeholder_name">John Smith</string>
+    <string name="placeholder_email">Joydeo@gmail.com</string>
+
+    <string name="action_forgot_password">Forgot password?</string>
+    <string name="action_sign_in_button">SIGN IN</string>
+    <string name="action_sign_up_button">SIGN UP</string>
+    <string name="action_sign_up_link">Sign up</string>
+    <string name="action_sign_in_link">Sign In</string>
+
+    <string name="prompt_no_account">Don\'t have account?</string>
+    <string name="prompt_have_account">You already have an account?</string>
+
+    <string name="error_fill_both_fields">Please fill in both fields</string>
+    <string name="error_fill_all_fields">Please fill in all fields</string>
+    <string name="error_invalid_email">Enter a valid email address</string>
+    <string name="error_password_mismatch">Passwords do not match</string>
+</resources>
