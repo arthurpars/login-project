@@ -18,8 +18,7 @@ internal fun LoginProjectApp() {
     when (screen) {
         AuthScreen.WELCOME -> WelcomeScreen(
             onSignInClick = { screen = AuthScreen.LOGIN },
-            onSignUpClick = { screen = AuthScreen.SIGN_UP }
-        )
+            onSignUpClick = { screen = AuthScreen.SIGN_UP })
 
         AuthScreen.LOGIN -> LoginScreen(onSignUpClick = { screen = AuthScreen.SIGN_UP })
 

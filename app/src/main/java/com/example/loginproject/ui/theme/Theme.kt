@@ -16,7 +16,6 @@ import com.example.loginproject.R
 @Composable
 fun LoginProjectTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true, content: @Composable () -> Unit
 ) {
     val colorScheme = when {

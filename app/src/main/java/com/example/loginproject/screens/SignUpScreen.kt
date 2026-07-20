@@ -14,16 +14,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.loginproject.R
 import com.example.loginproject.components.ButtonComponent
 import com.example.loginproject.components.ClickableTextComponent
@@ -34,14 +31,14 @@ import com.example.loginproject.components.PromptTextComponent
 import com.example.loginproject.components.StandardTextFieldComponent
 import com.example.loginproject.ui.theme.LoginProjectTheme
 import com.example.loginproject.ui.theme.authGradientBrush
+import com.example.loginproject.viewmodel.SignUpViewModel
 
 @Composable
-internal fun SignUpScreen(onLoginClick: () -> Unit) {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+internal fun SignUpScreen(
+    onLoginClick: () -> Unit,
+    viewModel: SignUpViewModel = viewModel()
+) {
+    val uiState = viewModel.uiState
 
     val fillAllFieldsError = stringResource(R.string.error_fill_all_fields)
     val invalidEmailError = stringResource(R.string.error_invalid_email)
@@ -77,49 +74,37 @@ internal fun SignUpScreen(onLoginClick: () -> Unit) {
 
                     StandardTextFieldComponent(
                         labelValue = stringResource(R.string.label_name),
-                        value = name,
+                        value = uiState.name,
                         placeholderValue = stringResource(R.string.placeholder_name),
-                        onValueChange = {
-                            name = it
-                            errorMessage = null
-                        }
+                        onValueChange = viewModel::onNameChange
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     StandardTextFieldComponent(
                         labelValue = stringResource(R.string.label_signup_identifier),
-                        value = email,
+                        value = uiState.email,
                         placeholderValue = stringResource(R.string.placeholder_email),
-                        onValueChange = {
-                            email = it
-                            errorMessage = null
-                        }
+                        onValueChange = viewModel::onEmailChange
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     PasswordTextFieldComponent(
                         labelValue = stringResource(R.string.label_password),
-                        value = password,
-                        onValueChange = {
-                            password = it
-                            errorMessage = null
-                        }
+                        value = uiState.password,
+                        onValueChange = viewModel::onPasswordChange
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     PasswordTextFieldComponent(
                         labelValue = stringResource(R.string.label_confirm_password),
-                        value = confirmPassword,
-                        onValueChange = {
-                            confirmPassword = it
-                            errorMessage = null
-                        }
+                        value = uiState.confirmPassword,
+                        onValueChange = viewModel::onConfirmPasswordChange
                     )
 
-                    errorMessage?.let {
+                    uiState.errorMessage?.let {
                         Spacer(modifier = Modifier.height(12.dp))
                         ErrorTextComponent(value = it)
                     }
@@ -127,12 +112,11 @@ internal fun SignUpScreen(onLoginClick: () -> Unit) {
                     Spacer(modifier = Modifier.height(35.dp))
 
                     ButtonComponent(value = stringResource(R.string.action_sign_up_button)) {
-                        errorMessage = when {
-                            name.isBlank() || email.isBlank() || password.isBlank() -> fillAllFieldsError
-                            !email.contains("@") -> invalidEmailError
-                            password != confirmPassword -> passwordMismatchError
-                            else -> null
-                        }
+                        viewModel.onSignUpClick(
+                            fillAllFieldsError,
+                            invalidEmailError,
+                            passwordMismatchError
+                        )
                     }
                 }
 
