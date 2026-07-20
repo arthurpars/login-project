@@ -31,6 +31,7 @@ import com.example.loginproject.components.PromptTextComponent
 import com.example.loginproject.components.StandardTextFieldComponent
 import com.example.loginproject.ui.theme.LoginProjectTheme
 import com.example.loginproject.ui.theme.authGradientBrush
+import com.example.loginproject.viewmodel.LoginError
 import com.example.loginproject.viewmodel.LoginViewModel
 
 @Composable
@@ -41,8 +42,11 @@ internal fun LoginScreen(
 ) {
     val uiState = viewModel.uiState
 
-    val fillBothFieldsError = stringResource(R.string.error_fill_both_fields)
-    val invalidEmailError = stringResource(R.string.error_invalid_email)
+    val errorMessage = when (uiState.error) {
+        LoginError.FillBothFields -> stringResource(R.string.error_fill_both_fields)
+        LoginError.InvalidEmail -> stringResource(R.string.error_invalid_email)
+        null -> null
+    }
 
     Box(
         modifier = Modifier
@@ -99,7 +103,7 @@ internal fun LoginScreen(
                         )
                     }
 
-                    uiState.errorMessage?.let {
+                    errorMessage?.let {
                         Spacer(modifier = Modifier.height(12.dp))
                         ErrorTextComponent(value = it)
                     }
@@ -107,7 +111,7 @@ internal fun LoginScreen(
                     Spacer(modifier = Modifier.height(64.dp))
 
                     ButtonComponent(value = stringResource(R.string.action_sign_in_button)) {
-                        viewModel.onLoginClick(fillBothFieldsError, invalidEmailError)
+                        viewModel.onLoginClick()
                     }
                 }
 
