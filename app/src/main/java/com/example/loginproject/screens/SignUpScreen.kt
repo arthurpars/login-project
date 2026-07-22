@@ -31,6 +31,7 @@ import com.example.loginproject.components.PromptTextComponent
 import com.example.loginproject.components.StandardTextFieldComponent
 import com.example.loginproject.ui.theme.LoginProjectTheme
 import com.example.loginproject.ui.theme.authGradientBrush
+import com.example.loginproject.viewmodel.SignUpError
 import com.example.loginproject.viewmodel.SignUpViewModel
 
 @Composable
@@ -40,9 +41,12 @@ internal fun SignUpScreen(
 ) {
     val uiState = viewModel.uiState
 
-    val fillAllFieldsError = stringResource(R.string.error_fill_all_fields)
-    val invalidEmailError = stringResource(R.string.error_invalid_email)
-    val passwordMismatchError = stringResource(R.string.error_password_mismatch)
+    val errorMessage = when (uiState.error) {
+        SignUpError.FillAllFields -> stringResource(R.string.error_fill_all_fields)
+        SignUpError.InvalidEmail -> stringResource(R.string.error_invalid_email)
+        SignUpError.PasswordMismatch -> stringResource(R.string.error_password_mismatch)
+        else -> null
+    }
 
     Box(
         modifier = Modifier
@@ -104,7 +108,7 @@ internal fun SignUpScreen(
                         onValueChange = viewModel::onConfirmPasswordChange
                     )
 
-                    uiState.errorMessage?.let {
+                    errorMessage?.let {
                         Spacer(modifier = Modifier.height(12.dp))
                         ErrorTextComponent(value = it)
                     }
@@ -112,11 +116,7 @@ internal fun SignUpScreen(
                     Spacer(modifier = Modifier.height(35.dp))
 
                     ButtonComponent(value = stringResource(R.string.action_sign_up_button)) {
-                        viewModel.onSignUpClick(
-                            fillAllFieldsError,
-                            invalidEmailError,
-                            passwordMismatchError
-                        )
+                        viewModel.onSignUpClick()
                     }
                 }
 
