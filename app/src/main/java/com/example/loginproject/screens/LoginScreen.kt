@@ -45,7 +45,7 @@ internal fun LoginScreen(
     val errorMessage = when (uiState.error) {
         LoginError.FillBothFields -> stringResource(R.string.error_fill_both_fields)
         LoginError.InvalidEmail -> stringResource(R.string.error_invalid_email)
-        null -> null
+        else -> null
     }
 
     Box(

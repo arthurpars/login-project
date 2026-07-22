@@ -45,7 +45,7 @@ internal fun SignUpScreen(
         SignUpError.FillAllFields -> stringResource(R.string.error_fill_all_fields)
         SignUpError.InvalidEmail -> stringResource(R.string.error_invalid_email)
         SignUpError.PasswordMismatch -> stringResource(R.string.error_password_mismatch)
-        null -> null
+        else -> null
     }
 
     Box(
