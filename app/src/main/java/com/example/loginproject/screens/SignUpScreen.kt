@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.loginproject.R
 import com.example.loginproject.components.ButtonComponent
 import com.example.loginproject.components.ClickableTextComponent
@@ -31,19 +30,23 @@ import com.example.loginproject.components.PromptTextComponent
 import com.example.loginproject.components.StandardTextFieldComponent
 import com.example.loginproject.ui.theme.LoginProjectTheme
 import com.example.loginproject.ui.theme.authGradientBrush
+import com.example.loginproject.di.appModule
 import com.example.loginproject.viewmodel.SignUpError
 import com.example.loginproject.viewmodel.SignUpViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.KoinApplication
 
 @Composable
 internal fun SignUpScreen(
     onLoginClick: () -> Unit,
-    viewModel: SignUpViewModel = viewModel()
+    viewModel: SignUpViewModel = koinViewModel()
 ) {
     val uiState = viewModel.uiState
 
     val errorMessage = when (uiState.error) {
         SignUpError.FillAllFields -> stringResource(R.string.error_fill_all_fields)
         SignUpError.InvalidEmail -> stringResource(R.string.error_invalid_email)
+        SignUpError.WeakPassword -> stringResource(R.string.error_weak_password)
         SignUpError.PasswordMismatch -> stringResource(R.string.error_password_mismatch)
         else -> null
     }
@@ -140,7 +143,9 @@ internal fun SignUpScreen(
 @Preview(showBackground = true)
 @Composable
 private fun SignUpScreenPreview() {
-    LoginProjectTheme {
-        SignUpScreen(onLoginClick = {})
+    KoinApplication(application = { modules(appModule) }) {
+        LoginProjectTheme {
+            SignUpScreen(onLoginClick = {})
+        }
     }
 }

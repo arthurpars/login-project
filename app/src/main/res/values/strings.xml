@@ -31,5 +31,6 @@
     <string name="error_fill_both_fields">Please fill in both fields</string>
     <string name="error_fill_all_fields">Please fill in all fields</string>
     <string name="error_invalid_email">Enter a valid email address</string>
+    <string name="error_weak_password">Password must be at least 8 characters</string>
     <string name="error_password_mismatch">Passwords do not match</string>
 </resources>

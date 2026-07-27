@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.loginproject.R
 import com.example.loginproject.components.ButtonComponent
 import com.example.loginproject.components.ClickableTextComponent
@@ -31,14 +30,17 @@ import com.example.loginproject.components.PromptTextComponent
 import com.example.loginproject.components.StandardTextFieldComponent
 import com.example.loginproject.ui.theme.LoginProjectTheme
 import com.example.loginproject.ui.theme.authGradientBrush
+import com.example.loginproject.di.appModule
 import com.example.loginproject.viewmodel.LoginError
 import com.example.loginproject.viewmodel.LoginViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.KoinApplication
 
 @Composable
 internal fun LoginScreen(
     onSignUpClick: () -> Unit,
     onForgotPasswordClick: () -> Unit = {},
-    viewModel: LoginViewModel = viewModel()
+    viewModel: LoginViewModel = koinViewModel()
 ) {
     val uiState = viewModel.uiState
 
@@ -94,8 +96,7 @@ internal fun LoginScreen(
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.End
+                        modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End
                     ) {
                         ClickableTextComponent(
                             value = stringResource(R.string.action_forgot_password),
@@ -135,7 +136,9 @@ internal fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 private fun LoginScreenPreview() {
-    LoginProjectTheme {
-        LoginScreen(onSignUpClick = {})
+    KoinApplication(application = { modules(appModule) }) {
+        LoginProjectTheme {
+            LoginScreen(onSignUpClick = {})
+        }
     }
 }
