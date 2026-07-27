@@ -96,7 +96,8 @@ internal fun LoginScreen(
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Column(
-                        modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.End
                     ) {
                         ClickableTextComponent(
                             value = stringResource(R.string.action_forgot_password),
