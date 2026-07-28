@@ -4,10 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.loginproject.validation.EmailValidator
+import com.example.loginproject.validation.PasswordValidator
 
 sealed interface SignUpError {
     data object FillAllFields : SignUpError
     data object InvalidEmail : SignUpError
+    data object WeakPassword : SignUpError
     data object PasswordMismatch : SignUpError
 }
 
@@ -19,7 +22,10 @@ data class SignUpUiState(
     val error: SignUpError? = null
 )
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(
+    private val emailValidator: EmailValidator,
+    private val passwordValidator: PasswordValidator
+) : ViewModel() {
 
     var uiState by mutableStateOf(SignUpUiState())
         private set
@@ -46,14 +52,13 @@ class SignUpViewModel : ViewModel() {
 
     private fun validate(state: SignUpUiState): SignUpError? = when {
         state.name.isBlank() ||
-            state.email.isBlank() ||
-            state.password.isBlank() ||
-            state.confirmPassword.isBlank() -> SignUpError.FillAllFields
+                state.email.isBlank() ||
+                state.password.isBlank() ||
+                state.confirmPassword.isBlank() -> SignUpError.FillAllFields
 
-        !isValidEmail(state.email) -> SignUpError.InvalidEmail
+        !emailValidator.isValid(state.email) -> SignUpError.InvalidEmail
+        !passwordValidator.isValid(state.password) -> SignUpError.WeakPassword
         state.password != state.confirmPassword -> SignUpError.PasswordMismatch
         else -> null
     }
-
-    private fun isValidEmail(email: String): Boolean = email.contains("@")
 }

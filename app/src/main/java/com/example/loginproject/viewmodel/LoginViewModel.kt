@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.loginproject.validation.EmailValidator
 
 sealed interface LoginError {
     data object FillBothFields : LoginError
@@ -16,7 +17,7 @@ data class LoginUiState(
     val error: LoginError? = null
 )
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(private val emailValidator: EmailValidator) : ViewModel() {
 
     var uiState by mutableStateOf(LoginUiState())
         private set
@@ -35,9 +36,7 @@ class LoginViewModel : ViewModel() {
 
     private fun validate(state: LoginUiState): LoginError? = when {
         state.email.isBlank() || state.password.isBlank() -> LoginError.FillBothFields
-        !isValidEmail(state.email) -> LoginError.InvalidEmail
+        !emailValidator.isValid(state.email) -> LoginError.InvalidEmail
         else -> null
     }
-
-    private fun isValidEmail(email: String): Boolean = email.contains("@")
 }
