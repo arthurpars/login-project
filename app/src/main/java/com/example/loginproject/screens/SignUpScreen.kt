@@ -30,11 +30,10 @@ import com.example.loginproject.components.PromptTextComponent
 import com.example.loginproject.components.StandardTextFieldComponent
 import com.example.loginproject.ui.theme.LoginProjectTheme
 import com.example.loginproject.ui.theme.authGradientBrush
-import com.example.loginproject.di.appModule
 import com.example.loginproject.viewmodel.SignUpError
+import com.example.loginproject.viewmodel.SignUpUiState
 import com.example.loginproject.viewmodel.SignUpViewModel
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.KoinApplication
 
 @Composable
 internal fun SignUpScreen(
@@ -43,6 +42,27 @@ internal fun SignUpScreen(
 ) {
     val uiState = viewModel.uiState
 
+    SignUpContent(
+        uiState = uiState,
+        onNameChange = viewModel::onNameChange,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
+        onSignUpClick = viewModel::onSignUpClick,
+        onLoginClick = onLoginClick
+    )
+}
+
+@Composable
+private fun SignUpContent(
+    uiState: SignUpUiState = SignUpUiState(),
+    onNameChange: (String) -> Unit = {},
+    onEmailChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {},
+    onConfirmPasswordChange: (String) -> Unit = {},
+    onSignUpClick: () -> Unit = {},
+    onLoginClick: () -> Unit = {}
+) {
     val errorMessage = when (uiState.error) {
         SignUpError.FillAllFields -> stringResource(R.string.error_fill_all_fields)
         SignUpError.InvalidEmail -> stringResource(R.string.error_invalid_email)
@@ -83,7 +103,7 @@ internal fun SignUpScreen(
                         labelValue = stringResource(R.string.label_name),
                         value = uiState.name,
                         placeholderValue = stringResource(R.string.placeholder_name),
-                        onValueChange = viewModel::onNameChange
+                        onValueChange = onNameChange
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -92,7 +112,7 @@ internal fun SignUpScreen(
                         labelValue = stringResource(R.string.label_signup_identifier),
                         value = uiState.email,
                         placeholderValue = stringResource(R.string.placeholder_email),
-                        onValueChange = viewModel::onEmailChange
+                        onValueChange = onEmailChange
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -100,7 +120,7 @@ internal fun SignUpScreen(
                     PasswordTextFieldComponent(
                         labelValue = stringResource(R.string.label_password),
                         value = uiState.password,
-                        onValueChange = viewModel::onPasswordChange
+                        onValueChange = onPasswordChange
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -108,7 +128,7 @@ internal fun SignUpScreen(
                     PasswordTextFieldComponent(
                         labelValue = stringResource(R.string.label_confirm_password),
                         value = uiState.confirmPassword,
-                        onValueChange = viewModel::onConfirmPasswordChange
+                        onValueChange = onConfirmPasswordChange
                     )
 
                     errorMessage?.let {
@@ -119,7 +139,7 @@ internal fun SignUpScreen(
                     Spacer(modifier = Modifier.height(35.dp))
 
                     ButtonComponent(value = stringResource(R.string.action_sign_up_button)) {
-                        viewModel.onSignUpClick()
+                        onSignUpClick()
                     }
                 }
 
@@ -142,10 +162,15 @@ internal fun SignUpScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun SignUpScreenPreview() {
-    KoinApplication(application = { modules(appModule) }) {
-        LoginProjectTheme {
-            SignUpScreen(onLoginClick = {})
-        }
+private fun SignUpContentPreview() {
+    LoginProjectTheme {
+        SignUpContent(
+            uiState = SignUpUiState(
+                name = "name",
+                email = "email",
+                password = "password",
+                confirmPassword = "password"
+            )
+        )
     }
 }

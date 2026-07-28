@@ -30,11 +30,10 @@ import com.example.loginproject.components.PromptTextComponent
 import com.example.loginproject.components.StandardTextFieldComponent
 import com.example.loginproject.ui.theme.LoginProjectTheme
 import com.example.loginproject.ui.theme.authGradientBrush
-import com.example.loginproject.di.appModule
 import com.example.loginproject.viewmodel.LoginError
+import com.example.loginproject.viewmodel.LoginUiState
 import com.example.loginproject.viewmodel.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.KoinApplication
 
 @Composable
 internal fun LoginScreen(
@@ -44,6 +43,25 @@ internal fun LoginScreen(
 ) {
     val uiState = viewModel.uiState
 
+    LoginContent(
+        uiState = uiState,
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onLoginClick = viewModel::onLoginClick,
+        onSignUpClick = onSignUpClick,
+        onForgotPasswordClick = onForgotPasswordClick
+    )
+}
+
+@Composable
+private fun LoginContent(
+    uiState: LoginUiState = LoginUiState(),
+    onEmailChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {},
+    onLoginClick: () -> Unit = {},
+    onSignUpClick: () -> Unit = {},
+    onForgotPasswordClick: () -> Unit = {}
+) {
     val errorMessage = when (uiState.error) {
         LoginError.FillBothFields -> stringResource(R.string.error_fill_both_fields)
         LoginError.InvalidEmail -> stringResource(R.string.error_invalid_email)
@@ -82,7 +100,7 @@ internal fun LoginScreen(
                         labelValue = stringResource(R.string.label_email),
                         value = uiState.email,
                         placeholderValue = stringResource(R.string.placeholder_email),
-                        onValueChange = viewModel::onEmailChange
+                        onValueChange = onEmailChange
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
@@ -90,7 +108,7 @@ internal fun LoginScreen(
                     PasswordTextFieldComponent(
                         labelValue = stringResource(R.string.label_password),
                         value = uiState.password,
-                        onValueChange = viewModel::onPasswordChange
+                        onValueChange = onPasswordChange
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
@@ -113,7 +131,7 @@ internal fun LoginScreen(
                     Spacer(modifier = Modifier.height(64.dp))
 
                     ButtonComponent(value = stringResource(R.string.action_sign_in_button)) {
-                        viewModel.onLoginClick()
+                        onLoginClick()
                     }
                 }
 
@@ -136,10 +154,8 @@ internal fun LoginScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun LoginScreenPreview() {
-    KoinApplication(application = { modules(appModule) }) {
-        LoginProjectTheme {
-            LoginScreen(onSignUpClick = {})
-        }
+private fun LoginContentPreview() {
+    LoginProjectTheme {
+        LoginContent(uiState = LoginUiState(email = "email", password = "password"))
     }
 }
