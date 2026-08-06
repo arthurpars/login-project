@@ -29,7 +29,11 @@ import com.example.loginproject.ui.theme.LoginProjectTheme
 import com.example.loginproject.ui.theme.authGradientBrush
 
 @Composable
-internal fun WelcomeScreen(onSignInClick: () -> Unit, onSignUpClick: () -> Unit) {
+internal fun WelcomeScreen(
+    onSignInClick: () -> Unit,
+    onSignUpClick: () -> Unit,
+    onViewTodoClick: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -75,6 +79,13 @@ internal fun WelcomeScreen(onSignInClick: () -> Unit, onSignUpClick: () -> Unit)
         SolidWhitePillButton(
             value = stringResource(R.string.action_sign_up_button),
             onClick = onSignUpClick
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedPillButton(
+            value = stringResource(R.string.action_view_todo_button),
+            onClick = onViewTodoClick
         )
 
         Spacer(modifier = Modifier.weight(1f))

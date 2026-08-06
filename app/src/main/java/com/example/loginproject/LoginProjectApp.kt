@@ -7,9 +7,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.example.loginproject.screens.LoginScreen
 import com.example.loginproject.screens.SignUpScreen
+import com.example.loginproject.screens.TodoScreen
 import com.example.loginproject.screens.WelcomeScreen
 
-private enum class AuthScreen { WELCOME, LOGIN, SIGN_UP }
+private enum class AuthScreen { WELCOME, LOGIN, SIGN_UP, TODO }
 
 @Composable
 internal fun LoginProjectApp() {
@@ -18,10 +19,13 @@ internal fun LoginProjectApp() {
     when (screen) {
         AuthScreen.WELCOME -> WelcomeScreen(
             onSignInClick = { screen = AuthScreen.LOGIN },
-            onSignUpClick = { screen = AuthScreen.SIGN_UP })
+            onSignUpClick = { screen = AuthScreen.SIGN_UP },
+            onViewTodoClick = { screen = AuthScreen.TODO })
 
         AuthScreen.LOGIN -> LoginScreen(onSignUpClick = { screen = AuthScreen.SIGN_UP })
 
         AuthScreen.SIGN_UP -> SignUpScreen(onLoginClick = { screen = AuthScreen.LOGIN })
+
+        AuthScreen.TODO -> TodoScreen(onBackClick = { screen = AuthScreen.WELCOME })
     }
 }

@@ -33,4 +33,13 @@
     <string name="error_invalid_email">Enter a valid email address</string>
     <string name="error_weak_password">Password must be at least 8 characters</string>
     <string name="error_password_mismatch">Passwords do not match</string>
+    <string name="error_todo_generic">Something went wrong. Please try again.</string>
+
+    <string name="action_view_todo_button">View Todo</string>
+    <string name="action_retry_button">Retry</string>
+    <string name="action_back_button">Back</string>
+
+    <string name="heading_todo">Todo</string>
+    <string name="label_completed">Completed</string>
+    <string name="label_not_completed">Not completed</string>
 </resources>
